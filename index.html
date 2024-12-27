@@ -12,11 +12,13 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            background: linear-gradient(to bottom, #2e7d32, #66bb6a);
             color: white;
         }
         .gallery {
             text-align: center;
+            width: 90%;
+            max-width: 600px;
         }
         .image-container {
             display: grid;
@@ -25,8 +27,8 @@
             margin-bottom: 20px;
         }
         .image-container img {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: auto;
             object-fit: cover;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -62,7 +64,7 @@
             grid-column: span 2;
         }
         .message-box {
-            font-size: 1.5em;
+            font-size: 1.2em;
             border: 1px solid white;
             padding: 10px;
             border-radius: 5px;
@@ -72,8 +74,8 @@
         }
         .next-button {
             padding: 10px 20px;
-            font-size: 1.2em;
-            color: #1e3c72;
+            font-size: 1em;
+            color: #2e7d32;
             background: white;
             border: none;
             border-radius: 5px;
@@ -88,6 +90,16 @@
         @keyframes flash {
             0% { box-shadow: 0 0 10px white; }
             100% { box-shadow: 0 0 0 white; }
+        }
+
+        @media (max-width: 600px) {
+            .message-box {
+                font-size: 1em;
+            }
+            .next-button {
+                font-size: 0.9em;
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
