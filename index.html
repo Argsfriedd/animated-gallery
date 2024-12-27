@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Picture Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: white;
+        }
+        .gallery {
+            text-align: center;
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .image-container .placeholder {
+            font-size: 1.2em;
+            color: #ccc;
+        }
+        .message-box {
+            font-size: 1.5em;
+            border: 1px solid white;
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 50px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .next-button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #1e3c72;
+            background: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .next-button:hover {
+            transform: scale(1.1);
+            animation: flash 0.3s;
+        }
+
+        @keyframes flash {
+            0% { box-shadow: 0 0 10px white; }
+            100% { box-shadow: 0 0 0 white; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery">
+        <div class="image-container" id="imageContainer">
+            <!-- Images will be dynamically added here -->
+        </div>
+        <div class="message-box" id="messageBox">
+            <!-- Message will display here letter by letter -->
+        </div>
+        <button class="next-button" onclick="nextContent()">Next</button>
+    </div>
+
+    <script>
+        const images = [
+            ["image1.jpg", "image2.jpg", "image3.jpg", "image4.jpg"],
+            ["image5.jpg", "image6.jpg"],
+            []
+        ];
+
+        const messages = [
+            "Welcome to the gallery!", 
+            "Enjoy the next set of images.", 
+            "No images to display."
+        ];
+
+        let currentIndex = 0;
+
+        function renderImages(imagesSet) {
+            const container = document.getElementById("imageContainer");
+            container.innerHTML = "";
+
+            if (imagesSet.length > 0) {
+                imagesSet.forEach(img => {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = img;
+                    container.appendChild(imgElement);
+                });
+            } else {
+                const placeholder = document.createElement("div");
+                placeholder.className = "placeholder";
+                placeholder.innerText = "No image";
+                container.appendChild(placeholder);
+            }
+        }
+
+        function typeMessage(message) {
+            const box = document.getElementById("messageBox");
+            box.innerHTML = "";
+            let index = 0;
+
+            function type() {
+                if (index < message.length) {
+                    box.innerHTML += message[index];
+                    index++;
+                    setTimeout(type, 100);
+                }
+            }
+
+            type();
+        }
+
+        function nextContent() {
+            currentIndex = (currentIndex + 1) % images.length;
+            renderImages(images[currentIndex]);
+            typeMessage(messages[currentIndex]);
+        }
+
+        // Initial rendering
+        renderImages(images[currentIndex]);
+        typeMessage(messages[currentIndex]);
+    </script>
+</body>
+</html>
