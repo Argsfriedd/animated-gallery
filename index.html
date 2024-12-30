@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Picture Gallery</title>
+    <title>Gallery 2024</title>
     <style>
         body {
             margin: 0;
@@ -12,42 +12,70 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(to bottom, #2e7d32, #66bb6a);
-            color: white;
+            overflow: hidden;
+            position: relative;
+            transition: background-color 0.3s, color 0.3s;
         }
+    
+        .light-mode {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(227, 242, 253, 0.8)),
+                        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4), rgba(187, 222, 251, 0.5));
+            background-size: 200% 200%, 120% 120%;
+            background-position: center, center;
+            background-attachment: fixed;
+            color: #36454F;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.2); /* Depth effect */
+        }
+    
+        .dark-mode {
+            background: linear-gradient(135deg, rgba(40, 40, 43, 0.8), rgba(40, 40, 43, 1)),
+                        radial-gradient(circle at 50% 50%, rgba(54, 69, 79, 0.4), rgba(54, 69, 79, 0.7));
+            background-size: 200% 200%, 120% 120%;
+            background-position: center, center;
+            background-attachment: fixed;
+            color: white;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 0, 0, 0.3); /* Depth effect */
+        }
+    
         .gallery {
             text-align: center;
             width: 90%;
-            max-width: 600px;
+            max-width: 1200px;
+            display: none;
         }
+    
         .image-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 10px;
             margin-bottom: 20px;
         }
+    
         .image-container img {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: cover;
+            aspect-ratio: 1 / 1;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transform: scale(0.9);
             animation: fadeIn 0.5s forwards;
         }
-        .image-container img:nth-child(1) {
-            animation-delay: 0.2s;
+    
+        @media (min-width: 600px) {
+            .image-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Larger columns */
+                gap: 20px;
+            }
+    
+            .image-container img {
+                max-width: 300px;
+                max-height: 3000px;
+                margin: auto;
+            }
         }
-        .image-container img:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-        .image-container img:nth-child(3) {
-            animation-delay: 0.6s;
-        }
-        .image-container img:nth-child(4) {
-            animation-delay: 0.8s;
-        }
+    
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -58,40 +86,112 @@
                 transform: scale(1);
             }
         }
-        .image-container .placeholder {
-            font-size: 1.2em;
-            color: #ccc;
-            grid-column: span 2;
-        }
+    
         .message-box {
             font-size: 1.2em;
-            border: 1px solid white;
+            border: 1px solid #36454F;
             padding: 10px;
             border-radius: 5px;
             min-height: 50px;
             margin-bottom: 20px;
             overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+    
         .next-button {
             padding: 10px 20px;
             font-size: 1em;
-            color: #2e7d32;
+            color: #36454F;
             background: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+    
         .next-button:hover {
             transform: scale(1.1);
             animation: flash 0.3s;
         }
-
+    
         @keyframes flash {
-            0% { box-shadow: 0 0 10px white; }
-            100% { box-shadow: 0 0 0 white; }
+            0% { box-shadow: 0 0 10px #36454F; }
+            100% { box-shadow: 0 0 0 #36454F; }
         }
-
+    
+        .mode-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #36454F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        .mode-switch:hover {
+            background: #36454F;
+        }
+    
+        .click-me {
+            position: absolute;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            background: white;
+            color: #36454F;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease, left 0.5s ease, top 0.5s ease;
+        }
+    
+        .password-prompt {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    
+        .password-prompt label {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            display: block;
+            color: #36454F;
+        }
+    
+        .password-prompt input {
+            margin: 10px 0;
+            padding: 5px;
+            font-size: 1em;
+            width: 80%;
+            border: 1px solid #36454F;
+            border-radius: 5px;
+        }
+    
+        .password-prompt button {
+            padding: 8px 16px;
+            background: #36454F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background 0.3s;
+        }
+    
+        .password-prompt button:hover {
+            background: #36454F;
+        }
+    
         @media (max-width: 600px) {
             .message-box {
                 font-size: 1em;
@@ -101,10 +201,46 @@
                 padding: 8px 16px;
             }
         }
+    
+        .flash-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: white;
+            opacity: 0;
+            animation: flashBang 0.5s forwards;
+        }
+    
+        @keyframes flashBang {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    
     </style>
+    
 </head>
-<body>
-    <div class="gallery">
+<body class="dark-mode">
+    <button class="click-me" id="clickMeButton">Click Me!</button>
+    <audio id="backgroundMusic" src="sounds/m1.mp3" loop></audio>
+    <audio id="backgroundMusic2" src="sounds/m2.mp3"></audio>
+
+    <div class="password-prompt" id="passwordPrompt">
+        <label for="passwordInput">Password</label>
+        <input type="password" id="passwordInput">
+        <button onclick="validatePassword()">Submit</button>
+        
+    </div>
+
+    <div class="gallery" id="gallery">
         <div class="image-container" id="imageContainer">
             <!-- Images will be dynamically added here -->
         </div>
@@ -114,64 +250,253 @@
         <button class="next-button" onclick="nextContent()">Next</button>
     </div>
 
+    <button class="mode-switch" id="modeSwitch" onclick="toggleMode()">Switch to Light Mode</button>
+
     <script>
+        // Create a new audio object and load the sound file
+        const clickSound = new Audio('sounds/mouse-click-sound-233951.mp3');
+
         const images = [
-            ["image1.jpg", "image2.jpg", "image3.jpg", "image4.jpg"],
-            ["image5.jpg", "image6.jpg"],
-            []
+            ["images/111.jpg"],
+            ["images/222.jpg"],
+            ["images/333.jpg"],
+            ["images/444.jpg"],
+            ["images/555.jpg"],
+            ["images/666.jpg"],
+            ["images/777.jpg"],
+            ["images/888.jpg"],
+            ["images/1.jpg"],
+            ["images/2.jpg"],
+            ["images/3.jpg"],
+            ["images/4.jpg"],
+            ["images/5.jpg"],
+            ["images/6.jpg"],
+            ["images/7.jpg"],
+            ["images/8.jpg"],
+            ["images/9.jpg"],
+            ["images/10.jpg"],
+            ["images/11.jpg"],
+            ["images/12.jpg"],
+            ["images/13.jpg"],
+            ["images/14.jpg"],
+            ["images/15.jpg"],
+            ["images/16.jpg"]
         ];
 
         const messages = [
-            "Welcome to the gallery!", 
-            "Enjoy the next set of images.", 
-            "No images to display."
+            "The first encounter started with a flick of a finger, no one knew what would be the tomorrow or outcome.\nWe met and liked each other, perhaps the tides of time pulling the threads of fate together.",
+            "We have had a few dates here and there and had fun together wherever.\nTime slows down whenever we hold hands as when we spend our moments.",
+            "Surely there were ups and downs in our journey, a few misunderstandings, and bitter nights.\nThose times when we couldn't even speak our hearts, times when we became silent and voiceless.",
+            "But we knew and trusted the beat of our hearts, the silence gradually became sorries.\nSorries became something we overcame, something that proves our understanding of each other.",
+            "Maybe it just proves that in the flood of doubt and uncertainty, the world pushes you,\nAnd love will remain above as a hand to guide those who were lost to the calm shore.",
+            "In the darkest of times, we always stayed on this journey, it has been a few months, yet it feels it's just the beginning.\nThe year is about to end, setting our path for a new dawn that we look forward.",
+            "And as the sun rises and new challenges come our way,\nHand in hand, I know we can win despite the odds against us.",
+            "And so I dedicate this piece to you—\n\"In the Garden of Lives.\"",
+            "Beneath the sun’s soft, golden rays,\nA flower shop hummed with warm, busy days.\nA girl in laughter, her spirit so bright,\nWelcomed the patrons with innocent delight.",
+            "“Free roses today!” her sweet voice rang clear,\nHer mother beside her, holding her near.\nA bond of pure love, unyielding, profound,\nIn the season of hearts, their joy would abound.",
+            "“Will Papa be home for my birthday surprise?”\nShe asked with a sparkle of hope in her eyes.\nHer mother assured her, with warmth in her tone,\n“Today, little princess, you’ll never feel alone.”",
+            "Far in the city, a man bore the weight,\nOf ceaseless demands, and the pull of fate.\nHis pen danced briskly, his mind sharp as steel,\nYet his heart yearned for the love he could feel.",
+            "A woman, crimson-haired, sought his embrace,\nLonging for moments time couldn’t erase.\nHer passion broke through his fortress of thought,\nFor love unyielding was the treasure she sought.",
+            "Secrets lingered in shadows, dark and concealed,\nIn whispered truths, their pasts were revealed.\nA bond forbidden, yet stronger it grew,\nAs they lived in the moment, with hearts ever true.",
+            "In a chapel adorned with vows and embrace,\nTwo souls united in love’s sacred space.\nThe groom kissed the bride, their hearts intertwined,\nA new life began, their stars realigned.",
+            "Guests cheered in joy, their clapping resounding,\nThe warmth of their love, eternally grounding.\n“Forever and always,” the groom softly swore,\n“Together in spirit, forever and more.”",
+            "In youthful delight, two friends raced the breeze,\nChasing the promise of treats meant to please.\nThey stumbled on fate, in a moment divine,\nAnd met a kind stranger with a radiant sign.",
+            "“Take these,” he offered, with a genuine smile,\nHis heart felt a joy it hadn’t in a while.\nThe girls bowed in thanks, their spirits alight,\nAs laughter and sweetness adorned the night.",
+            "He watched them depart, his heart full yet torn,\nFor memories of sorrow and love he had borne.\nThe skies above sang of time’s gentle thread,\nOf lives renewed, and pain left unsaid.",
+            "For the world had mended, its balance restored,\nThe wounds of the past no longer ignored.\nFrom anguish and grief to a tranquil refrain,\nThey lived in a harmony unmarked by pain.",
+            "Elyon stood silent, his tears softly fell,\nFor the lives he had touched, and the stories they tell.\nHe gazed at the heavens, his dreams yet untold,\nIn the whispers of time, his purpose consoled.",
+            "“Brina,” he murmured, her name like a hymn,\nA light in the shadows, where hope never dimmed.\n“What a vivid name, a life full and free,\nIn this new world of love, you’ll find destiny.”",
+            "The wind carried whispers of peace on its wings,\nA melody woven through life’s precious strings.\n“I hope you find happiness, as I’ll seek mine,”\nHe vowed to the stars, in their endless shine.",
+            "And so he walked on, through fields bright and fair,\nA guardian unseen, yet always aware.\nFor in the garden of lives, where love softly grows,\nEvery story concludes, yet eternally flows."
         ];
 
         let currentIndex = 0;
+        let clickCount = 0; // Track the number of clicks
 
-        function renderImages(imagesSet) {
-            const container = document.getElementById("imageContainer");
-            container.innerHTML = "";
+        function toggleMode() {
+            clickSound.play();
+            const body = document.body;
+            const modeSwitch = document.getElementById("modeSwitch");
 
-            if (imagesSet.length > 0) {
-                imagesSet.forEach(img => {
-                    const imgElement = document.createElement("img");
-                    imgElement.src = img;
-                    container.appendChild(imgElement);
-                });
+            if (body.classList.contains("light-mode")) {
+                body.classList.remove("light-mode");
+                body.classList.add("dark-mode");
+                modeSwitch.textContent = "Switch to Light Mode";
             } else {
-                const placeholder = document.createElement("div");
-                placeholder.className = "placeholder";
-                placeholder.innerText = "No image";
-                container.appendChild(placeholder);
+                body.classList.remove("dark-mode");
+                body.classList.add("light-mode");
+                modeSwitch.textContent = "Switch to Dark Mode";
             }
         }
 
-        function typeMessage(message) {
-            const box = document.getElementById("messageBox");
-            box.innerHTML = "";
-            let index = 0;
+        function validatePassword() {
+            clickSound.play();
+            const passwordInput = document.getElementById("passwordInput").value;
+            const passwordPrompt = document.getElementById("passwordPrompt");
+            const gallery = document.getElementById("gallery");
 
-            function type() {
-                if (index < message.length) {
-                    box.innerHTML += message[index];
-                    index++;
-                    setTimeout(type, 100);
+            if (passwordInput === "iloveyou") { // Replace with your desired password
+                passwordPrompt.style.display = "none";
+                gallery.style.display = "block";
+                loadImages();
+                displayMessage(messages[0]);
+
+                backgroundMusic.play();
+            } else {
+                alert("Incorrect password. Please try again.");
+            }
+        }
+
+        // Function to replace \n with ← as a placeholder in HTML
+        function formatMessage(message) {
+            return message.replace(/\n/g, '←');  // Replaces \n with ← as a placeholder
+        }
+
+        let typingInProgress = false; // Flag to track if typing is in progress
+
+        function displayMessage(message) {
+            const messageBox = document.getElementById("messageBox");
+            messageBox.innerHTML = ""; // Clear the current message
+            let i = 0;
+            const formattedMessage = formatMessage(message); // Format message to handle newlines as placeholders
+
+            // Disable the Next button and reduce its opacity while typing
+            const nextButton = document.querySelector(".next-button");
+            nextButton.disabled = true;
+            nextButton.style.opacity = 0.5;
+
+            let currentText = "";
+
+            const interval = setInterval(() => {
+                // Add one character at a time from formattedMessage
+                currentText += formattedMessage[i];
+
+                // Check for the placeholder ← and replace it with <br>
+                if (currentText.includes('←')) {
+                    currentText = currentText.replace('←', '<br>'); // Replace ← with <br> for a line break
                 }
+
+                messageBox.innerHTML = currentText; // Update the message box with the current typed text
+                i++;
+
+                if (i >= formattedMessage.length) {
+                    clearInterval(interval);
+
+                    // Re-enable the Next button and restore its opacity after typing is done
+                    nextButton.disabled = false;
+                    nextButton.style.opacity = 1;
+                }
+            }, 50); // Adjust typing speed here
+        }
+
+    let clickCount2 = 0; // Track the number of clicks
+
+    function nextContent() {
+    // Prevent multiple clicks while typing
+    if (typingInProgress) return;
+
+    typingInProgress = true; // Set the flag to indicate typing is in progress
+
+    // Increment the current index for images
+    currentIndex++;
+
+    // Flash effect and music change on the 8th click
+    clickCount2++;  // Increment click count for tracking
+
+    if (clickCount2 === 8) {
+        // Stop m1.mp3 if it's playing
+        const backgroundMusic = document.getElementById("backgroundMusic");
+        if (backgroundMusic) {
+            backgroundMusic.pause(); // Stop m1
+            backgroundMusic.currentTime = 0; // Reset the playback position
+        }
+
+        // Play m2.mp3 on the 8th click and loop it
+        const backgroundMusic2 = document.getElementById("backgroundMusic2");
+        if (backgroundMusic2) {
+            backgroundMusic2.src = "sounds/m2.mp3"; // Ensure correct path to m2.mp3
+            backgroundMusic2.loop = true;  // Enable loop
+            backgroundMusic2.play();  // Play the m2 music
+        }
+
+        triggerFlashEffect(); // Call the function to trigger the flash effect
+    }
+
+    // If we have reached the end of the images array (i.e., first index again), reset to the first index
+    if (currentIndex >= images.length) {
+        currentIndex = 0;
+
+        // Stop m2.mp3 when we loop back to the first index
+        const backgroundMusic2 = document.getElementById("backgroundMusic2");
+        if (backgroundMusic2) {
+            backgroundMusic2.pause();  // Stop m2
+            backgroundMusic2.currentTime = 0; // Reset the playback position of m2
+        }
+
+        // Play m1.mp3 again after looping back to the first index
+        const backgroundMusic = document.getElementById("backgroundMusic");
+        if (backgroundMusic) {
+            backgroundMusic.src = "sounds/m1.mp3"; // Ensure correct path to m1.mp3
+            backgroundMusic.loop = true;  // Enable loop for m1
+            backgroundMusic.play();  // Play m1 music
+        }
+    }
+
+    // Play the sound effect on click of Next button
+    clickSound.play();  // Play sound
+
+    // Load the images for the current index
+    loadImages();
+
+    // Display the corresponding message based on the currentIndex
+    displayMessage(messages[currentIndex]);
+
+    // Reset typingInProgress flag after a small delay
+    setTimeout(() => {
+        typingInProgress = false;
+    }, messages[currentIndex].length * 50); // Set timeout based on typing duration
+}
+
+
+        function triggerFlashEffect() {
+            // Create a new div element for the flash effect
+            const flashOverlay = document.createElement("div");
+            flashOverlay.classList.add("flash-overlay");
+            
+            // Append the overlay to the body
+            document.body.appendChild(flashOverlay);
+            
+            // Remove the overlay after the animation is complete
+            setTimeout(() => {
+                flashOverlay.remove();
+            }, 500); // Duration of the flash
+        }
+
+        function loadImages() {
+            const imageContainer = document.getElementById("imageContainer");
+            imageContainer.innerHTML = "";
+
+            images[currentIndex].forEach(src => {
+                const img = document.createElement("img");
+                img.src = src;
+                imageContainer.appendChild(img);
+            });
+        }
+
+        document.getElementById("clickMeButton").addEventListener("click", () => {
+            clickSound.play();  // Play sound
+            clickCount++;
+
+            if (clickCount === 6) {
+                const button = document.getElementById("clickMeButton");
+                button.style.display = "none";
+                document.getElementById("passwordPrompt").style.display = "block";
+            } else {
+                const button = document.getElementById("clickMeButton");
+                button.style.left = Math.random() * (window.innerWidth - button.offsetWidth) + "px";
+                button.style.top = Math.random() * (window.innerHeight - button.offsetHeight) + "px";
             }
-
-            type();
-        }
-
-        function nextContent() {
-            currentIndex = (currentIndex + 1) % images.length;
-            renderImages(images[currentIndex]);
-            typeMessage(messages[currentIndex]);
-        }
-
-        // Initial rendering
-        renderImages(images[currentIndex]);
-        typeMessage(messages[currentIndex]);
+        });
     </script>
 </body>
 </html>
